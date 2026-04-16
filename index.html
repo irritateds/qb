@@ -6,9 +6,7 @@
 <title>QB IRRITATED</title>
 
 <style>
-
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-
 body{background:#000;color:#fff;}
 
 /* HEADER */
@@ -19,11 +17,9 @@ display:flex;
 justify-content:space-between;
 padding:20px;
 background:rgba(0,0,0,0.6);
+z-index:10;
 }
-
 .logo{letter-spacing:5px;font-weight:bold;}
-
-nav a{color:#aaa;text-decoration:none;font-size:12px;}
 
 /* HERO */
 .hero{
@@ -34,7 +30,6 @@ justify-content:center;
 align-items:center;
 text-align:center;
 }
-
 .hero h1{font-size:50px;letter-spacing:10px;}
 .hero p{color:#777;margin-top:10px;}
 
@@ -56,7 +51,9 @@ height:300px;
 object-fit:cover;
 }
 
-select, input{
+h3{margin-top:10px;}
+
+select,input{
 width:100%;
 margin-top:10px;
 padding:10px;
@@ -73,8 +70,10 @@ color:black;
 border:none;
 font-weight:bold;
 width:100%;
+cursor:pointer;
 }
 
+/* SOCIAL */
 .socials{
 text-align:center;
 padding:30px;
@@ -86,6 +85,12 @@ color:#aaa;
 text-decoration:none;
 }
 
+footer{
+text-align:center;
+padding:20px;
+font-size:12px;
+color:#555;
+}
 </style>
 </head>
 
@@ -93,9 +98,6 @@ text-decoration:none;
 
 <header>
 <div class="logo">QB IRRITATED</div>
-<nav>
-<a href="#">DROP</a>
-</nav>
 </header>
 
 <section class="hero">
@@ -105,13 +107,13 @@ text-decoration:none;
 
 <section class="products">
 
+<!-- ПАЦИЕНТ 1 -->
 <div class="card">
+<img src="https://picsum.photos/800/800?random=1">
 
-<img src="https://picsum.photos/800/800?1">
+<h3>ZIP HOODIE “ПАЦИЕНТ 1” — $32</h3>
 
-<h3>MASK HOODIE — $79</h3>
-
-<select id="size">
+<select class="size">
 <option value="">Выбери размер</option>
 <option>S</option>
 <option>M</option>
@@ -119,12 +121,30 @@ text-decoration:none;
 <option>XL</option>
 </select>
 
-<input type="text" id="name" placeholder="Твоё имя">
+<input type="text" class="name" placeholder="Твоё имя">
+<input type="text" class="city" placeholder="Город">
 
-<input type="text" id="city" placeholder="Город">
+<button onclick="order(this,'ПАЦИЕНТ 1')">ORDER</button>
+</div>
 
-<button onclick="order()">ORDER</button>
+<!-- ПАЦИЕНТ ? -->
+<div class="card">
+<img src="https://picsum.photos/800/800?random=2">
 
+<h3>ZIP HOODIE “ПАЦИЕНТ ?” — $32</h3>
+
+<select class="size">
+<option value="">Выбери размер</option>
+<option>S</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+</select>
+
+<input type="text" class="name" placeholder="Твоё имя">
+<input type="text" class="city" placeholder="Город">
+
+<button onclick="order(this,'ПАЦИЕНТ ?')">ORDER</button>
 </div>
 
 </section>
@@ -135,20 +155,24 @@ text-decoration:none;
 <a href="https://tiktok.com" target="_blank">TIKTOK</a>
 </div>
 
+<footer>QB IRRITATED © 2026</footer>
+
 <script>
 
-function order(){
+function order(button, product){
 
-let size = document.getElementById("size").value;
-let name = document.getElementById("name").value;
-let city = document.getElementById("city").value;
+let card = button.parentElement;
+
+let size = card.querySelector(".size").value;
+let name = card.querySelector(".name").value;
+let city = card.querySelector(".city").value;
 
 if(size=="" || name=="" || city==""){
 alert("Заполни все поля");
 return;
 }
 
-let text = `Заказ QB IRRITATED:%0AТовар: MASK HOODIE%0AРазмер: ${size}%0AИмя: ${name}%0AГород: ${city}`;
+let text = `Заказ QB IRRITATED:%0AТовар: ${product}%0AРазмер: ${size}%0AИмя: ${name}%0AГород: ${city}`;
 
 window.open(`https://t.me/yourusername?text=${text}`, "_blank");
 
