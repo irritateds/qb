@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QB irritated | Store v7</title>
+    <title>QB irritated | Store v8</title>
     <style>
         :root {
             --bg-color: #050505;
@@ -47,7 +47,7 @@
             color: white; font-size: 10px; padding: 2px 6px; border-radius: 50%; 
         }
 
-        /* --- MENU BUTTON --- */
+        /* --- MENU BUTTON (HAMBURGER) --- */
         .menu-btn { cursor: pointer; display: flex; flex-direction: column; gap: 7px; z-index: 1100; width: 30px; }
         .menu-btn div { height: 2px; background-color: #fff; transition: var(--transition); border-radius: 2px; }
         .menu-btn .line-1 { width: 30px; }
@@ -58,17 +58,28 @@
         /* --- SIDE MENU --- */
         .side-menu { 
             position: fixed; top: 0; right: -400px; width: 350px; height: 100%; 
-            background: #000; transition: var(--transition); padding: 100px 40px; 
-            z-index: 1000; border-left: 1px solid #222;
+            background: #000; transition: var(--transition); padding: 40px; 
+            z-index: 1000; border-left: 1px solid #222; box-sizing: border-box;
         }
         .side-menu.active { right: 0; box-shadow: -20px 0 40px rgba(0,0,0,0.9); }
-        .menu-link { padding: 20px 0; border-bottom: 1px solid #111; cursor: pointer; transition: 0.3s; font-size: 1.2rem; letter-spacing: 2px; }
-        .menu-link:hover { color: var(--accent-red); padding-left: 15px; }
+
+        /* CLOSE BUTTON INSIDE MENU */
+        .close-menu {
+            text-align: right; font-size: 2rem; cursor: pointer; margin-bottom: 30px;
+            transition: 0.3s; color: #444;
+        }
+        .close-menu:hover { color: var(--accent-red); transform: rotate(90deg); }
+
+        .menu-link { padding: 18px 0; border-bottom: 1px solid #111; cursor: pointer; transition: 0.3s; font-size: 1.1rem; letter-spacing: 2px; }
+        .menu-link:hover { color: var(--accent-red); padding-left: 10px; }
 
         .submenu { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: #050505; }
         .submenu.open { max-height: 500px; padding: 10px 0; }
         .submenu div { padding: 12px 20px; color: #555; cursor: pointer; transition: 0.2s; font-size: 0.9rem; text-transform: uppercase; }
         .submenu div:hover { color: #fff; background: #111; }
+
+        .support-link { color: var(--admin-gold) !important; margin-top: 20px; border-color: #331 !important; }
+        .support-link:hover { color: #fff !important; text-shadow: 0 0 10px var(--admin-gold); }
 
         /* --- PRODUCT GRID --- */
         .container { padding: 40px; }
@@ -132,15 +143,20 @@
 </div>
 
 <div class="side-menu" id="sideMenu">
+    <div class="close-menu" onclick="toggleMenu()">×</div>
+    
     <div class="menu-link" onclick="toggleSub('sub1')">COLLECTION ▼</div>
-    <div class="submenu" id="sub1">
-        </div>
+    <div class="submenu" id="sub1"></div>
+    
     <div class="menu-link" onclick="toggleSub('sub2')">SOCIALS ▼</div>
     <div class="submenu" id="sub2">
-        <div onclick="window.open('https://t.me/irritateds')">TELEGRAM</div>
+        <div onclick="window.open('https://t.me/irritateds')">TELEGRAM CHANNEL</div>
         <div onclick="window.open('https://tiktok.com/irritatedly')">TIKTOK</div>
     </div>
-    <button onclick="location.reload()" style="background: #111; margin-top: 60px; font-size: 10px;">TERMINATE SESSION</button>
+
+    <div class="menu-link support-link" onclick="window.open('https://t.me/kybiiiuh')">TECH SUPPORT [DIRECT]</div>
+
+    <button onclick="location.reload()" style="background: #111; margin-top: 60px; font-size: 10px; height: 40px; padding: 0;">TERMINATE SESSION</button>
 </div>
 
 <div class="container" id="main-container">
@@ -165,8 +181,8 @@
 </div>
 
 <script>
-    let products = JSON.parse(localStorage.getItem('qb_v7_items')) || [];
-    let cart = JSON.parse(localStorage.getItem('qb_v7_cart')) || [];
+    let products = JSON.parse(localStorage.getItem('qb_v8_items')) || [];
+    let cart = JSON.parse(localStorage.getItem('qb_v8_cart')) || [];
     let currentUser = null;
     let currentResizedImage = null;
 
@@ -181,15 +197,11 @@
     function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active'); }
     function toggleSub(id) { document.getElementById(id).classList.toggle('open'); }
 
-    // --- УМНОЕ ОБНОВЛЕНИЕ КАТЕГОРИЙ В МЕНЮ ---
     function updateMenuCategories() {
         const sub1 = document.getElementById('sub1');
         const uniqueCats = [...new Set(products.map(p => p.cat))];
-        
         let html = `<div onclick="switchPage('all')">ALL ITEMS</div>`;
-        uniqueCats.forEach(cat => {
-            html += `<div onclick="switchPage('${cat}')">${cat.toUpperCase()}</div>`;
-        });
+        uniqueCats.forEach(cat => { html += `<div onclick="switchPage('${cat}')">${cat.toUpperCase()}</div>`; });
         sub1.innerHTML = html;
     }
 
@@ -208,7 +220,7 @@
                 </div>
             `;
         });
-        updateMenuCategories(); // Обновляем список категорий при каждом рендере
+        updateMenuCategories();
         updateCartUI();
     }
 
@@ -276,7 +288,7 @@
 
     function updateCartUI() {
         document.getElementById('cart-count').innerText = cart.length;
-        localStorage.setItem('qb_v7_cart', JSON.stringify(cart));
+        localStorage.setItem('qb_v8_cart', JSON.stringify(cart));
     }
 
     function addProduct() {
@@ -287,14 +299,14 @@
         if(!name || !price || !currentResizedImage) return showToast("INCOMPLETE DATA");
 
         products.push({ id: Date.now(), name, price, desc, cat, image: currentResizedImage });
-        localStorage.setItem('qb_v7_items', JSON.stringify(products));
+        localStorage.setItem('qb_v8_items', JSON.stringify(products));
         showToast("DATA UPLOADED");
         closeAllPages();
     }
 
     function deleteItem(id) {
         products = products.filter(p => p.id !== id);
-        localStorage.setItem('qb_v7_items', JSON.stringify(products));
+        localStorage.setItem('qb_v8_items', JSON.stringify(products));
         renderProducts(); showToast("PURGED");
     }
 
@@ -335,5 +347,3 @@
 
 </body>
 </html>
-
-
