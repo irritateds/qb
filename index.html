@@ -1,144 +1,266 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QB Irritated</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QB irritated | Store</title>
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --accent-red: #8b0000;
+            --text-white: #e0e0e0;
+            --glitch-gray: #222;
+        }
 
-<style>
+        body {
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg-color);
+            color: var(--text-white);
+            overflow-x: hidden;
+        }
 
-body{
-margin:0;
-font-family:Arial, Helvetica, sans-serif;
-background:#0b0b0b;
-color:white;
-}
+        /* Шапка */
+        header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
 
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px;
-border-bottom:1px solid #222;
-}
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
 
-.logo{
-font-size:22px;
-font-weight:bold;
-letter-spacing:3px;
-}
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
 
-nav a{
-color:white;
-text-decoration:none;
-margin-left:20px;
-font-size:14px;
-opacity:0.8;
-}
+        .cart-icon {
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
 
-.hero{
-height:60vh;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-background:linear-gradient(black,#111);
-}
+        .menu-btn {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1001;
+        }
 
-.hero h1{
-font-size:40px;
-letter-spacing:5px;
-}
+        .menu-btn div {
+            width: 30px;
+            height: 2px;
+            background-color: white;
+            transition: 0.3s;
+        }
 
-.products{
-padding:30px;
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:20px;
-}
+        /* Боковое меню */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            transition: 0.4s;
+            padding: 80px 20px;
+            z-index: 1000;
+            border-left: 1px solid var(--accent-red);
+        }
 
-.card{
-background:#111;
-border-radius:10px;
-overflow:hidden;
-}
+        .side-menu.active { right: 0; }
 
-.card img{
-width:100%;
-}
+        .menu-item {
+            margin-bottom: 20px;
+        }
 
-.card p{
-padding:10px;
-font-size:14px;
-}
+        .menu-link {
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: block;
+            padding: 10px 0;
+            border-bottom: 1px solid #222;
+        }
 
-button{
-width:100%;
-padding:10px;
-border:none;
-background:white;
-color:black;
-font-weight:bold;
-}
+        .submenu {
+            display: none;
+            padding-left: 20px;
+            margin-top: 10px;
+        }
 
-footer{
-margin-top:40px;
-padding:20px;
-text-align:center;
-border-top:1px solid #222;
-font-size:12px;
-opacity:0.6;
-}
+        .submenu a, .submenu div {
+            display: block;
+            padding: 5px 0;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
 
-</style>
+        /* Сетка товаров */
+        .container { padding: 40px; }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: #111;
+            padding: 15px;
+            border: 1px solid #222;
+            position: relative;
+        }
+
+        .card:hover { border-color: var(--accent-red); }
+
+        /* Админ-панель */
+        .admin-panel {
+            background: #1a1a1a;
+            padding: 20px;
+            margin-bottom: 40px;
+            border: 1px dashed var(--accent-red);
+        }
+
+        input, textarea, select {
+            background: #000;
+            color: white;
+            border: 1px solid #444;
+            padding: 10px;
+            margin: 5px;
+            width: 200px;
+        }
+
+        button {
+            background: var(--accent-red);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+    </style>
 </head>
-
 <body>
 
 <header>
-<div class="logo">QB IRRITATED</div>
-<nav>
-<a href="#">Shop</a>
-<a href="#">About</a>
-<a href="#">https://t.me/irritateds</a>
-</nav>
+    <div class="logo">QB IRRITATED</div>
+    <div class="nav-icons">
+        <div class="cart-icon">🛒 <span id="cart-count">0</span></div>
+        <div class="menu-btn" onclick="toggleMenu()">
+            <div></div><div></div><div></div>
+        </div>
+    </div>
 </header>
 
-<section class="hero">
-<h1>NEW DROP</h1>
-</section>
-
-<section class="products">
-
-<div class="card">
-<img src="https://picsum.photos/400/400?1">
-<p>Gothic Hoodie</p>
-<button>Buy</button>
+<div class="side-menu" id="sideMenu">
+    <div class="menu-item">
+        <div class="menu-link" onclick="toggleSub('sub1')">АССОРТИМЕНТ ▼</div>
+        <div class="submenu" id="sub1">
+            <a href="#">Футболки</a>
+            <a href="#">Зип-Худи</a>
+            <a href="#">Худи</a>
+            <a href="#">Лонгслив</a>
+            <a href="#">Свитшоты</a>
+            <a href="#" style="color: var(--accent-red);">Популярное</a>
+        </div>
+    </div>
+    <div class="menu-item">
+        <div class="menu-link" onclick="toggleSub('sub2')">НАШИ СОЦ СЕТИ ▼</div>
+        <div class="submenu" id="sub2">
+            <a href="https://t.me/irritateds" target="_blank">Telegram</a>
+            <a href="https://tiktok.com/irritatedly" target="_blank">TikTok</a>
+        </div>
+    </div>
+    <div class="menu-item">
+        <div class="menu-link" onclick="toggleSub('sub3')">ТЕХ ПОДДЕРЖКА ▼</div>
+        <div class="submenu" id="sub3">
+            <a href="https://t.me/kybiiiuh" target="_blank">Написать в TG</a>
+        </div>
+    </div>
+    <div class="menu-item">
+        <div class="menu-link" style="margin-top: 50px; color: #4e62d1;">ВХОД ЧЕРЕЗ MAIL.RU</div>
+    </div>
 </div>
 
-<div class="card">
-<img src="https://picsum.photos/400/400?2">
-<p>Street Mask Hoodie</p>
-<button>Buy</button>
+<div class="container">
+    <div class="admin-panel" id="adminArea">
+        <h3>УПРАВЛЕНИЕ ТОВАРАМИ (ADMIN)</h3>
+        <input type="text" id="pName" placeholder="Название">
+        <input type="number" id="pPrice" placeholder="Цена">
+        <textarea id="pDesc" placeholder="Описание"></textarea>
+        <select id="pCat">
+            <option value="all">Обычное</option>
+            <option value="popular">Популярное</option>
+        </select>
+        <button onclick="addProduct()">Добавить на сайт</button>
+    </div>
+
+    <div class="product-grid" id="productGrid">
+        </div>
 </div>
 
-<div class="card">
-<img src="https://picsum.photos/400/400?3">
-<p>Oversized Tee</p>
-<button>Buy</button>
-</div>
+<script>
+    let products = [];
 
-<div class="card">
-<img src="https://picsum.photos/400/400?4">
-<p>Dark Pants</p>
-<button>Buy</button>
-</div>
+    function toggleMenu() {
+        document.getElementById('sideMenu').classList.toggle('active');
+    }
 
-</section>
+    function toggleSub(id) {
+        let el = document.getElementById(id);
+        el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    }
 
-<footer>
-QB IRRITATED © 2026
-</footer>
+    function addProduct() {
+        const name = document.getElementById('pName').value;
+        const price = document.getElementById('pPrice').value;
+        const desc = document.getElementById('pDesc').value;
+        const cat = document.getElementById('pCat').value;
+
+        if(!name || !price) return alert("Заполни данные");
+
+        const product = { id: Date.now(), name, price, desc, cat };
+        products.push(product);
+        renderProducts();
+        
+        // Очистка полей
+        document.getElementById('pName').value = '';
+        document.getElementById('pPrice').value = '';
+        document.getElementById('pDesc').value = '';
+    }
+
+    function deleteProduct(id) {
+        products = products.filter(p => p.id !== id);
+        renderProducts();
+    }
+
+    function renderProducts() {
+        const grid = document.getElementById('productGrid');
+        grid.innerHTML = '';
+        products.forEach(p => {
+            grid.innerHTML += `
+                <div class="card">
+                    ${p.cat === 'popular' ? '<span style="color:red; font-size:10px">★ ПОПУЛЯРНОЕ</span>' : ''}
+                    <h4>${p.name}</h4>
+                    <p>${p.price} KZT</p>
+                    <small>${p.desc}</small>
+                    <div style="margin-top:15px">
+                        <button onclick="alert('Добавлено в корзину')">В корзину</button>
+                        <button onclick="deleteProduct(${p.id})" style="background:#333; margin-top:5px">Удалить</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+</script>
 
 </body>
 </html>
