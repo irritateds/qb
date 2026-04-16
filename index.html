@@ -13,7 +13,7 @@
             --card-bg: #0f0f0f;
         }
 
-        body { margin: 0; font-family: 'Courier New', Courier, monospace; background-color: var(--bg-color); color: var(--text-white); }
+        body { margin: 0; font-family: 'Courier New', Courier, monospace; background-color: var(--bg-color); color: var(--text-white); overflow-x: hidden; }
 
         /* Авторизация */
         #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 9999; }
@@ -22,195 +22,247 @@
         /* Шапка */
         header { padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; position: sticky; top: 0; background: rgba(10,10,10,0.9); backdrop-filter: blur(5px); z-index: 900; }
         .logo { font-size: 1.5rem; font-weight: bold; letter-spacing: 3px; cursor: pointer; }
-        .nav-icons { display: flex; gap: 20px; align-items: center; }
+        .nav-icons { display: flex; gap: 25px; align-items: center; }
+        .cart-icon { cursor: pointer; position: relative; font-size: 1.4rem; }
+        #cart-count { position: absolute; top: -10px; right: -10px; background: var(--accent-red); color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; }
+
         .menu-btn { cursor: pointer; z-index: 1001; }
         .menu-btn div { width: 25px; height: 2px; background: white; margin: 5px; transition: 0.3s; }
 
-        /* Меню */
-        .side-menu { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: rgba(0,0,0,0.98); transition: 0.4s; padding: 80px 20px; z-index: 1000; border-left: 1px solid #333; }
-        .side-menu.active { right: 0; }
-        .menu-link { padding: 15px 0; border-bottom: 1px solid #222; cursor: pointer; display: block; }
-        .submenu { display: none; padding-left: 15px; background: #050505; }
-        .submenu div { display: block; padding: 10px; color: #777; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
-        .submenu div:hover { color: var(--accent-red); }
-
-        /* Контент */
+        /* Сетки и Контейнеры */
         .container { padding: 40px; min-height: 80vh; }
-        .page-title { margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; border-left: 3px solid var(--accent-red); padding-left: 15px; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
 
-        /* Карточка */
-        .card { background: var(--card-bg); border: 1px solid #1a1a1a; display: flex; flex-direction: column; position: relative; }
-        .card-img-wrapper { width: 100%; height: 320px; overflow: hidden; background: #000; }
-        .card-img { width: 100%; height: 100%; object-fit: cover; }
-        .card-content { padding: 15px; }
-        .card-price { color: var(--accent-red); font-weight: bold; font-size: 1.2rem; }
+        /* Краткая карточка (только фото и цена) */
+        .card { background: var(--card-bg); border: 1px solid #1a1a1a; cursor: pointer; transition: 0.3s; position: relative; }
+        .card:hover { border-color: var(--accent-red); }
+        .card-img { width: 100%; height: 350px; object-fit: cover; border-bottom: 1px solid #111; }
+        .card-info { padding: 15px; text-align: center; }
+        .card-price { color: var(--accent-red); font-weight: bold; font-size: 1.1rem; }
 
-        /* Админка */
-        #admin-panel { display: none; background: #151515; padding: 20px; margin-bottom: 30px; border: 1px dashed var(--admin-gold); }
-        input, select { background: #000; border: 1px solid #333; color: white; padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
-        
-        button { background: var(--accent-red); color: white; border: none; padding: 10px 20px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; }
-        .btn-del { background: #222; font-size: 10px; color: #666; margin-top: 10px; }
+        /* СТРАНИЦА ТОВАРА (Full View) */
+        #product-page, #cart-page { display: none; position: fixed; top: 60px; left: 0; width: 100%; height: calc(100% - 60px); background: var(--bg-color); z-index: 850; overflow-y: auto; padding: 40px; box-sizing: border-box; }
+        .product-detail-flex { display: flex; gap: 50px; flex-wrap: wrap; max-width: 1000px; margin: 0 auto; }
+        .detail-img { width: 400px; height: 550px; object-fit: cover; border: 1px solid #222; }
+        .detail-info { flex: 1; min-width: 300px; }
+
+        /* КОРЗИНА */
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #222; }
+        .cart-total { font-size: 1.5rem; text-align: right; margin-top: 30px; color: var(--accent-red); }
+
+        /* Боковое меню */
+        .side-menu { position: fixed; top: 0; right: -320px; width: 300px; height: 100%; background: #000; transition: 0.4s; padding: 80px 20px; z-index: 1000; border-left: 1px solid #333; }
+        .side-menu.active { right: 0; }
+        .menu-link { padding: 15px 0; border-bottom: 1px solid #222; cursor: pointer; }
+        .submenu { display: none; padding-left: 15px; }
+        .submenu div { padding: 10px; color: #777; cursor: pointer; }
+
+        /* Кнопки */
+        button { background: var(--accent-red); color: white; border: none; padding: 15px 25px; cursor: pointer; font-weight: bold; text-transform: uppercase; width: 100%; }
+        .btn-back { background: transparent; border: 1px solid #444; width: auto; margin-bottom: 20px; padding: 10px 20px; }
+        input, select { background: #000; border: 1px solid #333; color: white; padding: 10px; width: 100%; margin-bottom: 10px; }
+        #admin-panel { display: none; background: #111; padding: 20px; border: 1px dashed var(--admin-gold); margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
 <div id="auth-overlay">
     <div class="auth-box">
-        <h2 id="auth-title">ВХОД</h2>
+        <h2>QB IRRITATED</h2>
         <input type="text" id="loginField" placeholder="Логин">
         <input type="password" id="passField" placeholder="Пароль">
-        <button onclick="handleAuth()">ПОДТВЕРДИТЬ</button>
-        <p style="font-size: 10px; cursor: pointer; margin-top: 15px; color: #666;" onclick="toggleAuthMode()" id="auth-toggle-text">Регистрация</p>
+        <button onclick="handleAuth()">ВОЙТИ</button>
     </div>
 </div>
 
 <header>
-    <div class="logo" onclick="switchPage('all')">QB IRRITATED</div>
+    <div class="logo" onclick="closeAllPages()">QB IRRITATED</div>
     <div class="nav-icons">
-        <div style="cursor: pointer;">🛒 <span id="cart-count">0</span></div>
+        <div class="cart-icon" onclick="openCart()">🛒 <span id="cart-count">0</span></div>
         <div class="menu-btn" onclick="toggleMenu()">
             <div></div><div></div><div></div>
         </div>
     </div>
 </header>
 
+<div id="cart-page">
+    <button class="btn-back" onclick="closeAllPages()">← НАЗАД К ПОКУПКАМ</button>
+    <h2 class="page-title">ВАША КОРЗИНА</h2>
+    <div id="cart-items-list"></div>
+    <div id="cart-total-display" class="cart-total">ИТОГО: 0 KZT</div>
+    <button style="margin-top: 20px; width: 300px; float: right;">ОФОРМИТЬ ЗАКАЗ</button>
+</div>
+
+<div id="product-page">
+    <button class="btn-back" onclick="closeAllPages()">← НАЗАД</button>
+    <div id="product-detail-content"></div>
+</div>
+
 <div class="side-menu" id="sideMenu">
-    <div id="userDisplay" style="font-size: 0.7rem; color: #444; margin-bottom: 20px;"></div>
-    
     <div class="menu-link" onclick="toggleSub('sub1')">АССОРТИМЕНТ ▼</div>
     <div class="submenu" id="sub1">
         <div onclick="switchPage('all')">Все товары</div>
-        <div onclick="switchPage('popular')">★ Популярное</div>
         <div onclick="switchPage('Футболки')">Футболки</div>
         <div onclick="switchPage('Зип-Худи')">Зип-Худи</div>
         <div onclick="switchPage('Худи')">Худи</div>
-        <div onclick="switchPage('Лонгслив')">Лонгслив</div>
-        <div onclick="switchPage('Свитшоты')">Свитшоты</div>
     </div>
-
     <div class="menu-link" onclick="toggleSub('sub2')">СОЦ СЕТИ ▼</div>
     <div class="submenu" id="sub2">
         <div onclick="window.open('https://t.me/irritateds')">Telegram</div>
         <div onclick="window.open('https://tiktok.com/irritatedly')">TikTok</div>
     </div>
-    
     <button onclick="location.reload()" style="background: #222; margin-top: 40px;">ВЫЙТИ</button>
 </div>
 
-<div class="container">
+<div class="container" id="main-container">
     <div id="admin-panel">
-        <h3 style="color: var(--admin-gold);">ДОБАВИТЬ ТОВАР</h3>
+        <h3 style="color: var(--admin-gold);">ADMIN: ДОБАВИТЬ ВЕЩЬ</h3>
         <input type="file" id="pImage" accept="image/*" onchange="processImage(this)">
         <input type="text" id="pName" placeholder="Название">
-        <input type="number" id="pPrice" placeholder="Цена (KZT)">
-        <input type="text" id="pDesc" placeholder="Описание">
-        
-        <label style="font-size: 10px; color: #666;">Категория:</label>
+        <input type="number" id="pPrice" placeholder="Цена">
+        <input type="text" id="pDesc" placeholder="Полное описание товара">
         <select id="pCat">
             <option value="Футболки">Футболки</option>
             <option value="Зип-Худи">Зип-Худи</option>
             <option value="Худи">Худи</option>
-            <option value="Лонгслив">Лонгслив</option>
-            <option value="Свитшоты">Свитшоты</option>
         </select>
-        
-        <label style="display: block; margin-top: 10px; font-size: 12px;">
-            <input type="checkbox" id="isPopular" style="width: auto;"> Отметить как Популярное
-        </label>
-        
         <button onclick="addProduct()">ОПУБЛИКОВАТЬ</button>
     </div>
 
-    <h2 id="currentPageTitle" class="page-title">ВСЕ ТОВАРЫ</h2>
+    <h2 id="page-title">АССОРТИМЕНТ</h2>
     <div class="product-grid" id="productGrid"></div>
 </div>
 
 <script>
+    let products = JSON.parse(localStorage.getItem('qb_v4_items')) || [];
+    let cart = JSON.parse(localStorage.getItem('qb_cart')) || [];
     let currentUser = null;
-    let products = JSON.parse(localStorage.getItem('qb_items_v3')) || [];
-    let currentCategory = 'all';
     let currentResizedImage = null;
 
-    // --- ФИЛЬТРАЦИЯ СТРАНИЦ ---
-    function switchPage(cat) {
-        currentCategory = cat;
-        const titleMap = {
-            'all': 'ВСЕ ТОВАРЫ',
-            'popular': 'ПОПУЛЯРНОЕ 🔥',
-            'Футболки': 'ФУТБОЛКИ',
-            'Зип-Худи': 'ЗИП-ХУДИ',
-            'Худи': 'ХУДИ',
-            'Лонгслив': 'ЛОНГСЛИВЫ',
-            'Свитшоты': 'СВИТШОТЫ'
-        };
-        document.getElementById('currentPageTitle').innerText = titleMap[cat] || cat;
-        renderProducts();
-        toggleMenu(); // Закрыть меню после выбора
+    // --- ЛОГИКА СТРАНИЦ ---
+    function openProduct(id) {
+        const p = products.find(x => x.id === id);
+        if(!p) return;
+        
+        document.getElementById('product-page').style.display = 'block';
+        document.getElementById('main-container').style.display = 'none';
+        document.getElementById('cart-page').style.display = 'none';
+
+        document.getElementById('product-detail-content').innerHTML = `
+            <div class="product-detail-flex">
+                <img src="${p.image}" class="detail-img">
+                <div class="detail-info">
+                    <h1>${p.name}</h1>
+                    <p style="color: var(--accent-red); font-size: 2rem;">${p.price} KZT</p>
+                    <hr style="border-color: #222; margin: 20px 0;">
+                    <p style="line-height: 1.6; color: #aaa;">${p.desc}</p>
+                    <button onclick="addToCart(${p.id})">ДОБАВИТЬ В КОРЗИНУ</button>
+                    <button style="background: white; color: black; margin-top: 10px;" onclick="alert('Переход к оплате...')">КУПИТЬ СЕЙЧАС</button>
+                </div>
+            </div>
+        `;
     }
 
-    // --- ЛОГИКА АДМИНА ---
+    function closeAllPages() {
+        document.getElementById('product-page').style.display = 'none';
+        document.getElementById('cart-page').style.display = 'none';
+        document.getElementById('main-container').style.display = 'block';
+        renderProducts();
+    }
+
+    // --- КОРЗИНА ---
+    function addToCart(id) {
+        const p = products.find(x => x.id === id);
+        cart.push(p);
+        updateCartUI();
+        alert("Товар добавлен в корзину");
+    }
+
+    function updateCartUI() {
+        document.getElementById('cart-count').innerText = cart.length;
+        localStorage.setItem('qb_cart', JSON.stringify(cart));
+    }
+
+    function openCart() {
+        document.getElementById('cart-page').style.display = 'block';
+        document.getElementById('main-container').style.display = 'none';
+        document.getElementById('product-page').style.display = 'none';
+        renderCartItems();
+    }
+
+    function renderCartItems() {
+        const list = document.getElementById('cart-items-list');
+        list.innerHTML = '';
+        let total = 0;
+
+        cart.forEach((item, index) => {
+            total += Number(item.price);
+            list.innerHTML += `
+                <div class="cart-item">
+                    <div style="display:flex; align-items:center; gap: 20px;">
+                        <img src="${item.image}" style="width:50px; height:60px; object-fit:cover;">
+                        <div>
+                            <b>${item.name}</b><br>
+                            <small>${item.price} KZT</small>
+                        </div>
+                    </div>
+                    <button onclick="removeFromCart(${index})" style="width:auto; background:#222; font-size:10px;">УДАЛИТЬ</button>
+                </div>
+            `;
+        });
+        document.getElementById('cart-total-display').innerText = `ИТОГО: ${total} KZT`;
+    }
+
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCartUI();
+        renderCartItems();
+    }
+
+    // --- РЕНДЕР АССОРТИМЕНТА ---
+    function renderProducts(category = 'all') {
+        const grid = document.getElementById('productGrid');
+        grid.innerHTML = '';
+        
+        let filtered = products;
+        if(category !== 'all') filtered = products.filter(p => p.cat === category);
+
+        filtered.forEach(p => {
+            const isAdmin = currentUser && currentUser.role === 'admin';
+            grid.innerHTML += `
+                <div class="card" onclick="openProduct(${p.id})">
+                    <img src="${p.image}" class="card-img">
+                    <div class="card-info">
+                        <div class="card-price">${p.price} KZT</div>
+                    </div>
+                    ${isAdmin ? `<button onclick="event.stopPropagation(); deleteItem(${p.id})" style="background:#333; height:30px; padding:0; font-size:10px;">УДАЛИТЬ</button>` : ''}
+                </div>
+            `;
+        });
+        updateCartUI();
+    }
+
+    // --- АДМИНКА И КАРТИНКИ ---
     function addProduct() {
         const name = document.getElementById('pName').value;
         const price = document.getElementById('pPrice').value;
         const desc = document.getElementById('pDesc').value;
         const cat = document.getElementById('pCat').value;
-        const isPop = document.getElementById('isPopular').checked;
 
-        if(!name || !price) return alert("Заполни поля!");
+        if(!name || !price || !currentResizedImage) return alert("Заполни всё, включая фото!");
 
-        const newItem = {
-            id: Date.now(),
-            name, price, desc, cat,
-            popular: isPop,
-            image: currentResizedImage || "https://via.placeholder.com/300x400?text=NO+IMAGE"
-        };
-
-        products.push(newItem);
-        localStorage.setItem('qb_items_v3', JSON.stringify(products));
+        products.push({ id: Date.now(), name, price, desc, cat, image: currentResizedImage });
+        localStorage.setItem('qb_v4_items', JSON.stringify(products));
         renderProducts();
-        // Очистка
-        document.getElementById('pName').value = '';
-        document.getElementById('pPrice').value = '';
+        closeAllPages();
     }
 
     function deleteItem(id) {
         products = products.filter(p => p.id !== id);
-        localStorage.setItem('qb_items_v3', JSON.stringify(products));
+        localStorage.setItem('qb_v4_items', JSON.stringify(products));
         renderProducts();
     }
 
-    function renderProducts() {
-        const grid = document.getElementById('productGrid');
-        grid.innerHTML = '';
-
-        // Фильтруем массив перед отображением
-        let filtered = products;
-        if (currentCategory === 'popular') {
-            filtered = products.filter(p => p.popular === true);
-        } else if (currentCategory !== 'all') {
-            filtered = products.filter(p => p.cat === currentCategory);
-        }
-
-        filtered.forEach(p => {
-            const isAdmin = currentUser && currentUser.role === 'admin';
-            grid.innerHTML += `
-                <div class="card">
-                    <div class="card-img-wrapper"><img src="${p.image}" class="card-img"></div>
-                    <div class="card-content">
-                        <h3 style="margin:0">${p.name}</h3>
-                        <p style="font-size:0.8rem; color:#666">${p.desc}</p>
-                        <p class="card-price">${p.price} KZT</p>
-                        <button onclick="alert('Добавлено')">В КОРЗИНУ</button>
-                        ${isAdmin ? `<button onclick="deleteItem(${p.id})" class="btn-del">УДАЛИТЬ</button>` : ''}
-                    </div>
-                </div>
-            `;
-        });
-    }
-
-    // --- СИСТЕМНЫЕ ФУНКЦИИ (Auth/Image) ---
     function processImage(input) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -220,39 +272,34 @@
                 const canvas = document.createElement('canvas');
                 canvas.width = 600; canvas.height = (img.height * 600) / img.width;
                 canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                currentResizedImage = canvas.toDataURL('image/jpeg', 0.7);
+                currentResizedImage = canvas.toDataURL('image/jpeg', 0.6);
             };
         };
         reader.readAsDataURL(input.files[0]);
     }
 
+    // --- СИСТЕМНОЕ ---
     function handleAuth() {
         const login = document.getElementById('loginField').value;
-        const pass = document.getElementById('passField').value;
-        let users = JSON.parse(localStorage.getItem('qb_users')) || [];
-        
-        let user = users.find(u => u.login === login && u.pass === pass);
-        if(!user && login === 'kybiiiuh') { // Авто-создание админа при первом входе
-            user = {login: 'kybiiiuh', pass, role: 'admin'};
-            users.push(user);
-            localStorage.setItem('qb_users', JSON.stringify(users));
-        }
-
-        if(user) {
-            currentUser = user;
-            document.getElementById('auth-overlay').style.display = 'none';
-            if(user.role === 'admin') document.getElementById('admin-panel').style.display = 'block';
-            renderProducts();
+        if(login === 'kybiiiuh') {
+            currentUser = { login: 'kybiiiuh', role: 'admin' };
+            document.getElementById('admin-panel').style.display = 'block';
         } else {
-            alert("Ошибка доступа");
+            currentUser = { login, role: 'user' };
         }
+        document.getElementById('auth-overlay').style.display = 'none';
+        renderProducts();
     }
 
-    function toggleAuthMode() { alert("Для тестов просто введите логин kybiiiuh и любой пароль"); }
     function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active'); }
     function toggleSub(id) {
         const el = document.getElementById(id);
         el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    }
+    function switchPage(cat) {
+        document.getElementById('page-title').innerText = cat === 'all' ? 'АССОРТИМЕНТ' : cat.toUpperCase();
+        renderProducts(cat);
+        toggleMenu();
     }
 </script>
 
