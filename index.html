@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QB irritated | Premium Store v6</title>
+    <title>QB irritated | Store v7</title>
     <style>
         :root {
             --bg-color: #050505;
@@ -15,14 +15,12 @@
         }
 
         body { 
-            margin: 0; 
-            font-family: 'Courier New', Courier, monospace; 
-            background-color: var(--bg-color); 
-            color: var(--text-white); 
+            margin: 0; font-family: 'Courier New', Courier, monospace; 
+            background-color: var(--bg-color); color: var(--text-white); 
             overflow-x: hidden;
         }
 
-        /* --- УВЕДОМЛЕНИЯ --- */
+        /* --- TOASTS --- */
         #toast-container { position: fixed; top: 20px; right: 20px; z-index: 10000; }
         .toast {
             background: #111; border-left: 4px solid var(--accent-red);
@@ -32,109 +30,66 @@
         }
         @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        /* --- ШАПКА --- */
+        /* --- HEADER --- */
         header { 
-            padding: 20px 40px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid #1a1a1a; 
-            position: sticky; top: 0; 
+            padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; 
             background: rgba(5,5,5,0.9); backdrop-filter: blur(15px); z-index: 900; 
         }
 
-        .logo { 
-            font-size: 1.6rem; font-weight: bold; letter-spacing: 5px; cursor: pointer;
-            transition: var(--transition);
-        }
+        .logo { font-size: 1.6rem; font-weight: bold; letter-spacing: 5px; cursor: pointer; transition: var(--transition); }
         .logo:hover { color: var(--accent-red); text-shadow: 0 0 15px var(--accent-red); }
 
         .nav-right { display: flex; gap: 35px; align-items: center; }
-
-        .cart-icon { cursor: pointer; position: relative; font-size: 1.4rem; transition: 0.3s; }
+        .cart-icon { cursor: pointer; position: relative; font-size: 1.4rem; }
         #cart-count { 
-            position: absolute; top: -8px; right: -12px; 
-            background: var(--accent-red); color: white; 
-            font-size: 10px; padding: 2px 6px; border-radius: 50%; 
+            position: absolute; top: -8px; right: -12px; background: var(--accent-red); 
+            color: white; font-size: 10px; padding: 2px 6px; border-radius: 50%; 
         }
 
-        /* --- ИСПРАВЛЕННАЯ КНОПКА МЕНЮ --- */
-        .menu-btn { 
-            cursor: pointer; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 7px; 
-            z-index: 1100;
-            width: 30px;
-        }
-        .menu-btn div { 
-            height: 2px; 
-            background-color: #fff; 
-            transition: var(--transition);
-            border-radius: 2px;
-        }
+        /* --- MENU BUTTON --- */
+        .menu-btn { cursor: pointer; display: flex; flex-direction: column; gap: 7px; z-index: 1100; width: 30px; }
+        .menu-btn div { height: 2px; background-color: #fff; transition: var(--transition); border-radius: 2px; }
         .menu-btn .line-1 { width: 30px; }
         .menu-btn .line-2 { width: 20px; align-self: flex-end; }
         .menu-btn .line-3 { width: 30px; }
-
         .menu-btn:hover div { background-color: var(--accent-red); width: 30px; }
 
-        /* --- БОКОВОЕ МЕНЮ --- */
+        /* --- SIDE MENU --- */
         .side-menu { 
-            position: fixed; top: 0; right: -400px; 
-            width: 350px; height: 100%; 
-            background: #000; transition: var(--transition); 
-            padding: 100px 40px; z-index: 1000; 
-            border-left: 1px solid #222;
+            position: fixed; top: 0; right: -400px; width: 350px; height: 100%; 
+            background: #000; transition: var(--transition); padding: 100px 40px; 
+            z-index: 1000; border-left: 1px solid #222;
         }
         .side-menu.active { right: 0; box-shadow: -20px 0 40px rgba(0,0,0,0.9); }
-
-        .menu-link { 
-            padding: 20px 0; border-bottom: 1px solid #111; 
-            cursor: pointer; transition: 0.3s; font-size: 1.2rem; letter-spacing: 2px;
-        }
+        .menu-link { padding: 20px 0; border-bottom: 1px solid #111; cursor: pointer; transition: 0.3s; font-size: 1.2rem; letter-spacing: 2px; }
         .menu-link:hover { color: var(--accent-red); padding-left: 15px; }
 
         .submenu { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: #050505; }
-        .submenu.open { max-height: 400px; padding: 10px 0; }
-        .submenu div { padding: 12px 20px; color: #555; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
+        .submenu.open { max-height: 500px; padding: 10px 0; }
+        .submenu div { padding: 12px 20px; color: #555; cursor: pointer; transition: 0.2s; font-size: 0.9rem; text-transform: uppercase; }
         .submenu div:hover { color: #fff; background: #111; }
 
-        /* --- СЕТКА ТОВАРОВ --- */
+        /* --- PRODUCT GRID --- */
         .container { padding: 40px; }
-        .product-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-            gap: 30px; animation: fadeInUp 0.8s ease forwards;
-        }
-
-        .card { 
-            background: var(--card-bg); border: 1px solid #151515; 
-            cursor: pointer; transition: var(--transition); position: relative;
-        }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; animation: fadeInUp 0.8s ease forwards; }
+        .card { background: var(--card-bg); border: 1px solid #151515; cursor: pointer; transition: var(--transition); position: relative; }
         .card:hover { border-color: var(--accent-red); transform: translateY(-10px); }
-        .card-img { width: 100%; height: 400px; object-fit: cover; transition: 0.6s; filter: grayscale(0.3); }
-        .card:hover .card-img { transform: scale(1.05); filter: grayscale(0); }
+        .card-img { width: 100%; height: 400px; object-fit: cover; transition: 0.6s; filter: grayscale(0.2); }
+        .card:hover .card-img { transform: scale(1.03); filter: grayscale(0); }
         .card-price { padding: 15px; text-align: center; color: var(--accent-red); font-weight: bold; font-size: 1.2rem; }
 
-        /* --- СТРАНИЦЫ --- */
+        /* --- PAGES --- */
         #product-page, #cart-page { 
-            display: none; position: fixed; top: 0; left: 0; 
-            width: 100%; height: 100%; background: var(--bg-color); 
-            z-index: 950; overflow-y: auto; padding: 80px 40px; box-sizing: border-box;
-            animation: fadeInUp 0.5s ease;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--bg-color); z-index: 950; overflow-y: auto; padding: 80px 40px; 
+            box-sizing: border-box; animation: fadeInUp 0.5s ease;
         }
-
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- КНОПКИ --- */
-        button { 
-            background: var(--accent-red); color: white; border: none; 
-            padding: 18px; cursor: pointer; font-weight: bold; letter-spacing: 3px;
-            transition: 0.3s; width: 100%;
-        }
+        button { background: var(--accent-red); color: white; border: none; padding: 18px; cursor: pointer; font-weight: bold; letter-spacing: 3px; transition: 0.3s; width: 100%; text-transform: uppercase; }
         button:hover { background: #fff; color: #000; }
         .btn-back { background: transparent; border: 1px solid #444; width: auto; margin-bottom: 40px; padding: 10px 25px; color: #666; }
-        .btn-back:hover { border-color: #fff; color: #fff; }
 
         #admin-panel { display: none; border: 1px dashed var(--admin-gold); padding: 30px; margin-bottom: 50px; }
         input, select, textarea { background: #000; border: 1px solid #222; color: white; padding: 15px; margin-bottom: 15px; width: 100%; box-sizing: border-box; }
@@ -150,7 +105,6 @@
         <input type="text" id="loginField" placeholder="USERNAME">
         <input type="password" id="passField" placeholder="PASSWORD">
         <button onclick="handleAuth()">ENTER SYSTEM</button>
-        <p style="font-size:10px; color:#444; margin-top:20px;">ACCESS RESTRICTED</p>
     </div>
 </div>
 
@@ -159,19 +113,17 @@
     <div class="nav-right">
         <div class="cart-icon" onclick="openCart()">🛒 <span id="cart-count">0</span></div>
         <div class="menu-btn" onclick="toggleMenu()">
-            <div class="line-1"></div>
-            <div class="line-2"></div>
-            <div class="line-3"></div>
+            <div class="line-1"></div><div class="line-2"></div><div class="line-3"></div>
         </div>
     </div>
 </header>
 
 <div id="cart-page">
-    <button class="btn-back" onclick="closeAllPages()">← BACK TO STORE</button>
-    <h1 style="letter-spacing:10px;">YOUR_CART</h1>
+    <button class="btn-back" onclick="closeAllPages()">← BACK</button>
+    <h1 style="letter-spacing:10px;">CART_OVERVIEW</h1>
     <div id="cart-items-list" style="max-width:800px;"></div>
     <div id="cart-total-display" style="font-size: 2.5rem; margin-top: 40px; color: var(--accent-red);"></div>
-    <button style="max-width:400px; margin-top:40px;" onclick="showToast('ORDER SENT TO SYSTEM')">CHECKOUT</button>
+    <button style="max-width:400px; margin-top:40px;" onclick="showToast('TRANSMITTING ORDER...')">CONFIRM PURCHASE</button>
 </div>
 
 <div id="product-page">
@@ -182,11 +134,7 @@
 <div class="side-menu" id="sideMenu">
     <div class="menu-link" onclick="toggleSub('sub1')">COLLECTION ▼</div>
     <div class="submenu" id="sub1">
-        <div onclick="switchPage('all')">ALL ITEMS</div>
-        <div onclick="switchPage('Футболки')">T-SHIRTS</div>
-        <div onclick="switchPage('Зип-Худи')">ZIP-HOODIES</div>
-        <div onclick="switchPage('Худи')">HOODIES</div>
-    </div>
+        </div>
     <div class="menu-link" onclick="toggleSub('sub2')">SOCIALS ▼</div>
     <div class="submenu" id="sub2">
         <div onclick="window.open('https://t.me/irritateds')">TELEGRAM</div>
@@ -201,13 +149,15 @@
         <input type="file" id="pImage" onchange="processImage(this)">
         <input type="text" id="pName" placeholder="ITEM NAME">
         <input type="number" id="pPrice" placeholder="PRICE KZT">
-        <textarea id="pDesc" placeholder="PRODUCT DESCRIPTION (MATERIAL, FIT, DETAILS)" rows="5"></textarea>
+        <textarea id="pDesc" placeholder="PRODUCT DESCRIPTION" rows="5"></textarea>
         <select id="pCat">
             <option value="Футболки">T-SHIRT</option>
             <option value="Зип-Худи">ZIP-HOODIE</option>
             <option value="Худи">HOODIE</option>
+            <option value="Лонгслив">LONG SLEEVE</option>
+            <option value="Свитшоты">SWEATSHIRT</option>
         </select>
-        <button onclick="addProduct()">UPLOADING TO STORE...</button>
+        <button onclick="addProduct()">PUBLISH DATA</button>
     </div>
 
     <h2 id="page-title" style="color:#222; font-size:10px; letter-spacing:5px;">// CURRENT_VAULT</h2>
@@ -215,24 +165,52 @@
 </div>
 
 <script>
-    let products = JSON.parse(localStorage.getItem('qb_v6_items')) || [];
-    let cart = JSON.parse(localStorage.getItem('qb_v6_cart')) || [];
+    let products = JSON.parse(localStorage.getItem('qb_v7_items')) || [];
+    let cart = JSON.parse(localStorage.getItem('qb_v7_cart')) || [];
     let currentUser = null;
     let currentResizedImage = null;
 
-    // --- СИСТЕМА УВЕДОМЛЕНИЙ ---
     function showToast(text) {
         const container = document.getElementById('toast-container');
         const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerText = text;
+        toast.className = 'toast'; toast.innerText = text;
         container.appendChild(toast);
         setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 400); }, 3000);
     }
 
-    // --- НАВИГАЦИЯ ---
     function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active'); }
     function toggleSub(id) { document.getElementById(id).classList.toggle('open'); }
+
+    // --- УМНОЕ ОБНОВЛЕНИЕ КАТЕГОРИЙ В МЕНЮ ---
+    function updateMenuCategories() {
+        const sub1 = document.getElementById('sub1');
+        const uniqueCats = [...new Set(products.map(p => p.cat))];
+        
+        let html = `<div onclick="switchPage('all')">ALL ITEMS</div>`;
+        uniqueCats.forEach(cat => {
+            html += `<div onclick="switchPage('${cat}')">${cat.toUpperCase()}</div>`;
+        });
+        sub1.innerHTML = html;
+    }
+
+    function renderProducts(category = 'all') {
+        const grid = document.getElementById('productGrid');
+        grid.innerHTML = '';
+        const filtered = category === 'all' ? products : products.filter(p => p.cat === category);
+
+        filtered.forEach(p => {
+            const isAdmin = currentUser && currentUser.role === 'admin';
+            grid.innerHTML += `
+                <div class="card" onclick="openProduct(${p.id})">
+                    <img src="${p.image}" class="card-img">
+                    <div class="card-price">${p.price} KZT</div>
+                    ${isAdmin ? `<button onclick="event.stopPropagation(); deleteItem(${p.id})" style="background:#000; color:#444; font-size:8px; height:25px; padding:0;">[PURGE_DATA]</button>` : ''}
+                </div>
+            `;
+        });
+        updateMenuCategories(); // Обновляем список категорий при каждом рендере
+        updateCartUI();
+    }
 
     function openProduct(id) {
         const p = products.find(x => x.id === id);
@@ -260,12 +238,9 @@
         renderProducts();
     }
 
-    // --- КОРЗИНА ---
     function addToCart(id) {
         const p = products.find(x => x.id === id);
-        cart.push(p);
-        updateCartUI();
-        showToast("ITEM SECURED IN CART");
+        cart.push(p); updateCartUI(); showToast("ITEM SECURED");
     }
 
     function openCart() {
@@ -276,8 +251,7 @@
 
     function renderCartItems() {
         const list = document.getElementById('cart-items-list');
-        list.innerHTML = '';
-        let total = 0;
+        list.innerHTML = ''; let total = 0;
         cart.forEach((item, index) => {
             total += Number(item.price);
             list.innerHTML += `
@@ -297,34 +271,12 @@
     }
 
     function removeFromCart(index) {
-        cart.splice(index, 1);
-        updateCartUI();
-        renderCartItems();
-        showToast("ITEM REMOVED");
+        cart.splice(index, 1); updateCartUI(); renderCartItems(); showToast("REMOVED");
     }
 
     function updateCartUI() {
         document.getElementById('cart-count').innerText = cart.length;
-        localStorage.setItem('qb_v6_cart', JSON.stringify(cart));
-    }
-
-    // --- АДМИН И РЕНДЕР ---
-    function renderProducts(category = 'all') {
-        const grid = document.getElementById('productGrid');
-        grid.innerHTML = '';
-        const filtered = category === 'all' ? products : products.filter(p => p.cat === category);
-
-        filtered.forEach(p => {
-            const isAdmin = currentUser && currentUser.role === 'admin';
-            grid.innerHTML += `
-                <div class="card" onclick="openProduct(${p.id})">
-                    <img src="${p.image}" class="card-img">
-                    <div class="card-price">${p.price} KZT</div>
-                    ${isAdmin ? `<button onclick="event.stopPropagation(); deleteItem(${p.id})" style="background:#000; color:#444; font-size:8px; height:25px; padding:0;">[DELETE_DATA]</button>` : ''}
-                </div>
-            `;
-        });
-        updateCartUI();
+        localStorage.setItem('qb_v7_cart', JSON.stringify(cart));
     }
 
     function addProduct() {
@@ -335,29 +287,27 @@
         if(!name || !price || !currentResizedImage) return showToast("INCOMPLETE DATA");
 
         products.push({ id: Date.now(), name, price, desc, cat, image: currentResizedImage });
-        localStorage.setItem('qb_v6_items', JSON.stringify(products));
-        showToast("DATA UPLOADED TO VAULT");
+        localStorage.setItem('qb_v7_items', JSON.stringify(products));
+        showToast("DATA UPLOADED");
         closeAllPages();
     }
 
     function deleteItem(id) {
         products = products.filter(p => p.id !== id);
-        localStorage.setItem('qb_v6_items', JSON.stringify(products));
-        renderProducts();
-        showToast("DATA PURGED");
+        localStorage.setItem('qb_v7_items', JSON.stringify(products));
+        renderProducts(); showToast("PURGED");
     }
 
     function processImage(input) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            const img = new Image();
-            img.src = e.target.result;
+            const img = new Image(); img.src = e.target.result;
             img.onload = () => {
                 const canvas = document.createElement('canvas');
                 canvas.width = 600; canvas.height = (img.height * 600) / img.width;
                 canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
                 currentResizedImage = canvas.toDataURL('image/jpeg', 0.6);
-                showToast("IMAGE PROCESSED");
+                showToast("IMAGE READY");
             };
         };
         reader.readAsDataURL(input.files[0]);
@@ -368,10 +318,10 @@
         if(login === 'kybiiiuh') {
             currentUser = { role: 'admin' };
             document.getElementById('admin-panel').style.display = 'block';
-            showToast("ADMIN_ACCESS_GRANTED");
+            showToast("ADMIN_GRANTED");
         } else {
             currentUser = { role: 'user' };
-            showToast("GUEST_ACCESS_GRANTED");
+            showToast("GUEST_GRANTED");
         }
         document.getElementById('auth-overlay').style.display = 'none';
         renderProducts();
@@ -379,11 +329,11 @@
 
     function switchPage(cat) {
         document.getElementById('page-title').innerText = `// ${cat.toUpperCase()}_VAULT`;
-        renderProducts(cat);
-        toggleMenu();
+        renderProducts(cat); toggleMenu();
     }
 </script>
 
 </body>
 </html>
+
 
