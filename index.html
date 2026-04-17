@@ -148,14 +148,22 @@ color:#444;
 <img id="main1" src="IMG_0245.jpeg">
 
 <div class="thumbs">
-<img src="IMG_0245.jpeg" onclick="changeImage('main1', this.src)">
-<img src="IMG_0244.jpeg" onclick="changeImage('main1', this.src)">
+<img src="IMG_0245.jpeg" onclick="setProduct('hoodie')">
+<img src="IMG_0244.jpeg" onclick="setProduct('tshirt')">
 </div>
 </div>
 
 <div class="info">
+
 <h2>ПАЦИЕНТ 1</h2>
-<div class="price">$32</div>
+
+<div class="price" id="price">$32</div>
+
+<!-- ВЫБОР ТИПА -->
+<select id="type" onchange="setProduct(this.value)">
+<option value="hoodie">ZIP HOODIE</option>
+<option value="tshirt">T-SHIRT</option>
+</select>
 
 <select class="size">
 <option value="">Размер</option>
@@ -170,7 +178,8 @@ color:#444;
 <input type="text" class="name" placeholder="Имя">
 <input type="text" class="city" placeholder="Город">
 
-<button onclick="order(this,'ПАЦИЕНТ 1')">ORDER</button>
+<button onclick="orderProduct(this)">ORDER</button>
+
 </div>
 
 </section>
@@ -213,11 +222,25 @@ color:#444;
 
 <script>
 
-function changeImage(id, src){
-document.getElementById(id).src = src;
+let currentType = "hoodie";
+
+function setProduct(type){
+currentType = type;
+
+let img = document.getElementById("main1");
+let price = document.getElementById("price");
+
+if(type === "hoodie"){
+img.src = "IMG_0245.jpeg";
+price.innerText = "$32";
+}
+else{
+img.src = "IMG_0244.jpeg";
+price.innerText = "$22";
+}
 }
 
-function order(button, product){
+function orderProduct(button){
 
 let card = button.parentElement;
 
@@ -230,7 +253,11 @@ alert("Заполни все поля");
 return;
 }
 
-let text = `Заказ QB IRRITATED:%0AТовар: ${product}%0AРазмер: ${size}%0AИмя: ${name}%0AГород: ${city}`;
+let productName = currentType === "hoodie"
+? "ПАЦИЕНТ 1 (ZIP HOODIE)"
+: "ПАЦИЕНТ 1 (ФУТБОЛКА)";
+
+let text = `Заказ QB IRRITATED:%0AТовар: ${productName}%0AРазмер: ${size}%0AИмя: ${name}%0AГород: ${city}`;
 
 window.open(`https://t.me/kybiiiuh?text=${text}`, "_blank");
 
