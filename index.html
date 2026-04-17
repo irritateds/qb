@@ -6,6 +6,7 @@
 <title>QB IRRITATED</title>
 
 <style>
+
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:#000;color:#fff;}
 
@@ -14,57 +15,89 @@ header{
 position:fixed;
 width:100%;
 display:flex;
-justify-content:space-between;
+justify-content:center;
 padding:20px;
 background:rgba(0,0,0,0.6);
 z-index:10;
 }
-.logo{letter-spacing:5px;font-weight:bold;}
+.logo{letter-spacing:6px;font-size:14px;}
 
 /* HERO */
 .hero{
-height:80vh;
+height:70vh;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
 }
-.hero h1{font-size:50px;letter-spacing:10px;}
-.hero p{color:#777;margin-top:10px;}
+.hero h1{
+font-size:48px;
+letter-spacing:10px;
+}
+.hero p{
+color:#777;
+margin-top:10px;
+}
 
-/* PRODUCTS */
-.products{
+/* PRODUCT */
+.product{
+display:flex;
+flex-direction:column;
 padding:20px;
-display:grid;
-gap:40px;
+margin-bottom:60px;
+border-top:1px solid #111;
 }
 
-.card{
-border:1px solid #111;
-padding:15px;
-}
-
-.card img{
+/* GALLERY */
+.gallery img{
 width:100%;
-height:300px;
-object-fit:cover;
+height:auto;
 }
 
-h3{margin-top:10px;}
+.thumbs{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
 
+.thumbs img{
+width:70px;
+opacity:0.5;
+cursor:pointer;
+}
+
+.thumbs img:hover{
+opacity:1;
+}
+
+/* INFO */
+.info{
+margin-top:20px;
+}
+
+.info h2{
+letter-spacing:4px;
+}
+
+.price{
+color:#aaa;
+margin:10px 0;
+}
+
+/* FORM */
 select,input{
 width:100%;
 margin-top:10px;
-padding:10px;
+padding:12px;
 background:#111;
 color:white;
 border:none;
 }
 
 button{
-margin-top:10px;
-padding:10px;
+margin-top:15px;
+padding:14px;
 background:white;
 color:black;
 border:none;
@@ -81,16 +114,19 @@ padding:30px;
 
 .socials a{
 margin:0 10px;
-color:#aaa;
+color:#777;
 text-decoration:none;
+font-size:12px;
 }
 
+/* FOOTER */
 footer{
 text-align:center;
 padding:20px;
 font-size:12px;
-color:#555;
+color:#444;
 }
+
 </style>
 </head>
 
@@ -105,78 +141,78 @@ color:#555;
 <p>LIMITED DROP</p>
 </section>
 
-<section class="products">
-
 <!-- ПАЦИЕНТ 1 -->
-<div class="card">
-<img src="https://raw.githubusercontent.com/irritateds/qb/main/IMG_0245.jpeg">
+<section class="product">
 
-<h3>ZIP HOODIE “ПАЦИЕНТ 1” — $32</h3>
+<div class="gallery">
+<img id="main1" src="IMG_0245.jpeg">
+
+<div class="thumbs">
+<img src="IMG_0245.jpeg" onclick="changeImage('main1', this.src)">
+<img src="IMG_0244.jpeg" onclick="changeImage('main1', this.src)">
+</div>
+</div>
+
+<div class="info">
+<h2>ПАЦИЕНТ 1</h2>
+<div class="price">$32</div>
 
 <select class="size">
-<option value="">Выбери размер</option>
+<option value="">Размер</option>
 <option>S</option>
 <option>M</option>
 <option>L</option>
 <option>XL</option>
 </select>
 
-<input type="text" class="name" placeholder="Твоё имя">
+<input type="text" class="name" placeholder="Имя">
 <input type="text" class="city" placeholder="Город">
 
 <button onclick="order(this,'ПАЦИЕНТ 1')">ORDER</button>
 </div>
 
-<!-- ПАЦИЕНТ ? -->
-<div class="card">
-<img src="https://raw.githubusercontent.com/irritateds/qb/main/IMG_0241.jpeg">
+</section>
 
-<h3>ZIP HOODIE “ПАЦИЕНТ ?” — $32</h3>
+<!-- ПАЦИЕНТ ? -->
+<section class="product">
+
+<div class="gallery">
+<img id="main2" src="IMG_0241.jpeg">
+</div>
+
+<div class="info">
+<h2>ПАЦИЕНТ ?</h2>
+<div class="price">$32</div>
 
 <select class="size">
-<option value="">Выбери размер</option>
+<option value="">Размер</option>
 <option>S</option>
 <option>M</option>
 <option>L</option>
 <option>XL</option>
 </select>
 
-<input type="text" class="name" placeholder="Твоё имя">
+<input type="text" class="name" placeholder="Имя">
 <input type="text" class="city" placeholder="Город">
 
 <button onclick="order(this,'ПАЦИЕНТ ?')">ORDER</button>
 </div>
 
-  <!-- ФУТБОЛКА -->
-<div class="card">
-<img src="https://raw.githubusercontent.com/irritateds/qb/main/IMG_0244.jpeg">
-
-<h3>T-SHIRTS “Пациент 1” — $22</h3>
-
-<select class="size">
-<option value="">Выбери размер</option>
-<option>S</option>
-<option>M</option>
-<option>L</option>
-<option>XL</option>
-</select>
-
-<input type="text" class="name" placeholder="Твоё имя">
-<input type="text" class="city" placeholder="Город">
-
-<button onclick="order(this,'ФУТБОЛКА QB BASIC')">ORDER</button>
-</div>
-
 </section>
 
 <div class="socials">
-<a href="https://t.me/irritateds" target="_blank">TELEGRAM</a>
-<a href="https://www.tiktok.com/@irritatedly?_r=1&_t=ZS-95bf55dCPlV" target="_blank">TIKTOK</a>
+<a href="https://instagram.com" target="_blank">INSTAGRAM</a>
+<a href="https://t.me/yourusername" target="_blank">TELEGRAM</a>
+<a href="https://tiktok.com" target="_blank">TIKTOK</a>
 </div>
 
 <footer>QB IRRITATED © 2026</footer>
 
 <script>
+
+function changeImage(id, src){
+document.getElementById(id).src = src;
+}
 
 function order(button, product){
 
@@ -193,7 +229,7 @@ return;
 
 let text = `Заказ QB IRRITATED:%0AТовар: ${product}%0AРазмер: ${size}%0AИмя: ${name}%0AГород: ${city}`;
 
-window.open(`https://t.me/kybiiiuh?text=${text}`, "_blank");
+window.open(`https://t.me/yourusername?text=${text}`, "_blank");
 
 }
 
