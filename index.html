@@ -126,7 +126,62 @@ padding:20px;
 font-size:12px;
 color:#444;
 }
+@media (min-width: 768px){
 
+/* ОБЩИЙ КОНТЕЙНЕР */
+.product{
+flex-direction:row;
+align-items:flex-start;
+gap:60px;
+max-width:1100px;
+margin:80px auto;
+}
+
+/* ГАЛЕРЕЯ */
+.gallery{
+width:50%;
+}
+
+.gallery img{
+width:100%;
+aspect-ratio: 4/5;
+object-fit: cover;
+}
+
+/* МИНИАТЮРЫ */
+.thumbs{
+justify-content:flex-start;
+}
+
+/* ИНФО */
+.info{
+width:50%;
+position:sticky;
+top:120px;
+}
+
+/* ТЕКСТ */
+.info h2{
+font-size:24px;
+letter-spacing:6px;
+}
+
+.price{
+font-size:18px;
+}
+
+/* КНОПКА */
+button{
+transition:0.3s;
+}
+
+button:hover{
+background:black;
+color:white;
+border:1px solid white;
+}
+
+}
 </style>
 </head>
 
